@@ -1,0 +1,35 @@
+= OAuth2 module
+
+== Maven build
+
+We need to add the auth-oauth2 jar on classpath.
+
+[source,xml]
+----
+<dependency>
+	<groupId>com.ubiqube.mano.auth</groupId>
+	<artifactId>auth-keycloak</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+</dependency>
+----
+
+== Configurations
+
+=== Spring on server side
+
+Consider configuring spring using `~/.mano/configuration.properties` 
+
+[source,yaml]
+----
+keycloak:
+  realm: mano-realm
+  auth-server-url: https://auth.mano.ubiqube.com/auth/
+  ssl-required: external
+  resource: mano-vnfm
+  credentials:
+    secret: 50e312ab-9f12-481e-b6a8-c23e0de21628
+  use-resource-role-mappings: true
+  bearer-only: true
+----
+
+
