@@ -7,7 +7,7 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 //OK HTML 
 ifdef::html[]
-:includedir: doc-src/etsi-mano-java
+:includedir: docs/etsi-mano-java
 endif::[]
 
 

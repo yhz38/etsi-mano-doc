@@ -1,6 +1,6 @@
 FROM gradle:jdk8-alpine
 
-ADD doc-src/		doc-src
+ADD docs/		docs
 ADD build.gradle	.
 
 RUN	gradle asciidoc_msa_html

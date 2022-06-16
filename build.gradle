@@ -47,11 +47,11 @@ asciidoctor {
     'format': 'html',
     'icons' : 'font'
 
-  sourceDir = file('doc-src')
+  sourceDir = file('docs')
   outputDir  file('build/html')
 
   resources {
-    from('doc-src') {
+    from('docs') {
       include '**/*.png'
       include '**/*.jpg'
       include '**/*.mp4'
