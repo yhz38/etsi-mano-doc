@@ -1,7 +1,301 @@
-= ETSI-MANO Documentation
+= {company_name} MANO module
 ifndef::imagesdir[:imagesdir: images]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
-== Overview
 
-TODO
+== Introduction
+This section gives a high-level description of how {product_name}  manages the VNF/NS LCM leveraging its MANO module along with the workflow module.
+
+The MANO module of {product_name} is an ETSI compliant module supporting standard interfaces as per the ETSI specification for NFVO and VNFM modules.
+
+Following is a standard reference architecture of ETSI MANO highlighting {product_name}’s role in the reference architecture.
+
+.{product_name} in ETSI MANO
+image:image5.png[width=800px]
+
+{product_name} has a dedicated module called the MANO module which has the implementation of the ETSI compliant NFVO and also VNFM. We also leverage the workflow module to model the usage of this MANO module in order to provide a more intuitive user experience.
+
+All the workflow processes and microservice libraries that we have are built which consume the ETSI APIs of the MANO module in the backend. To perform the lifecycle management of VNFs and CNFs, we have dedicated workflows at various stages
+
+Following is the high level diagram that shows how {product_name}’s MANO modules works.
+
+.Software Architecture for VNF and CNF orchestration
+image:image6.png[width=800px]
+
+NOTE: Currently there is a difference between the process to manage VNFs and CNFs in the MANO module of MSA as the CNF specifications are yet to be matured on the ETSI specification. Hence for CNF there is a more simpler approach for the time being.
+
+As shown in the above diagram, the user interface to the MANO modules is provided leveraging the adapters, microservices and  workflows in {product_name}
+
+== Managed entities
+
+In addition to the VIM VNF and SVNFM that {product_name} as a ETSI MANO solution supports, {product_name} also supports Kubernetes for CNF orchestration.
+
+All the components that need to be orchestrated are defined as managed entities in {product_name}
+
+.{product_name} Managed Entities
+image:image7.png[width=800px]
+
+
+== VNF Lifecycle Management
+
+Following are the two aspects involved in the VNF lifecycle management:
+
+- VNF Package Management
+- VNF Instance Lifecycle management
+
+VNF Lifecycle Management is done via a set of predefined workflows that the user can simply trigger on the MSActivator UI. As {product_name} is 100% REST based those workflows can also be programmatically triggered.
+
+
+=== VNF Package Management
+
+This aspect is a prerequisite for VNF Lifecycle Management.Following are the various stages in the VNF Package Management in the same order:
+
+- VNF Package Creation: A VNF package needs to be created for every VNF that we want to manage under the MANO. This involves assigning a new VNF package ID for every VNF package created in the NFVO which will be unique. This will make the VNF appear in the VNF catalog with status ‘CREATED’
+- VNF Package Onboarding: The VNF package needs to be onboarded with a VNFD (and other relevant artifacts) which describes the structure and capabilities of the VNF that we want to manage under this MANO. This will update the VNF status in the VNF catalog to ‘ONBOARDED’
+- VNF Package Update: Currently Enable/Disable actions are supported for these steps due to the lack of ETSi specs on this point
+- VNF Package Delete: When we do not need the VNF anymore in the MANO, then we can decide to delete the VNF package which will be the last step of the VNF LCM.
+
+.Packages Management
+image:image8.png[width=800px]
+
+=== VNF Instance Lifecycle management
+
+VNF Lifecycle Management is done via a set of predefined workflows that the user can simply trigger on the {product_name} UI. 
+As {product_name} is 100% REST based those workflows can also be triggered programmatically.
+
+=== VNF Instance Lifecycle Management
+
+This aspect is a prerequisite for VNF Lifecycle Management. These functions are in the scope of the VNFM module. 
+Following are the various stages in the VNF Lifecycle Management in the same order:
+
+- VNF Instance Creation: Once VNF package is onboarded, we can start the VNF LCM. This is a {product_name} specific step which will create a VNF Instance in the VNFM. This is a prerequisite for further VNF LCM operations.
+- VNF LCM: The VNF instance can now be operated for other lifecycle operations that include instantiation, stop, scale, heal and other LCM operations of the VNF. During the LCM management of the VNFs, MSA MANO module will leverage the Gnocchi module of Openstack to monitor the VNF indicators that are necessary for monitoring the VNF components and trigger suitable for auto-scaling/healing actions
+- VNF Instance Deletion: This step is executed at the end of VNF lifecycle in VNFM which removes the VNF from the VNF Instances list.
+- VNF Instantiation
+- VNF Scaling and healing
+- VNF Termination
+
+.VNF Lifecycle Management
+image:image10.png[width=800px]
+
+=== Prerequisites for VNF Package Onboarding
+
+This aspect is a prerequisite for any VNF. 
+For {product_name} MANO module to be able to onboard the VNF into its NFVO successfully the following conditions have to be met:
+
+- VNF compatibility with the given VIM (including VIM version, networking requirements and so on) is all good. Usually this is addressed by the VNF vendors.
+- Ensure you have the required artifacts like VNFD as per the ETSI spec. For our project we support the SOL001 spec that is based on TOSCA. If the necessary artifacts are not available, then use the VNFD editor and create one based on the inputs from the VNF vendor.
+- Upload the artifacts in a dedicated folder of {product_name} repository. And also create the images that are necessary for the VNF on the VIM as currently the behavior of the VIM (Openstack) API while uploading big images is unpredictable sometimes.
+
+We can then perform the usual VNF Package management and VNF LCM. To be safe, we recommend that all of the above and the following activities are done in a staging/pre-production environment before following the same in the production environment.
+
+Following are the high level activities that can be performed as a part of VNF package and Lifecycle management functions of the MANO module of MSA:
+
+- Create a VNF package for the intended VNF to be onboarded
+- Onboard the VNF in to the VNF package by choosing the corresponding artifact
+- Start the VNF instance lifecycle operations under the VNF LCM menu. The VNFM module of MSA will execute the related operations with the VIM as per the configurations specified in the VNFD
+- Once the VNF is not more required to be in service, we systematically follow the VNFM LCM stages and then later disable and delete the VNF package that will remove it from the VNF catalog
+
+.NSD VNFD Descriptor Creation
+image:image12.png[width=800px]
+
+
+NOTE: All of these operations on {product_name} have inherent northbound REST APIs that can be leveraged to build a CI/CD pipeline in the staging environment, test the VNF and when the results are satisfactory, run the production deployment for the same set of VNF artifacts
+
+
+== CNF Lifecycle Management
+
+As explained in the introduction section of this document currently the way CNFs are being handled in a different way than CNFs and hence this dedicated section.
+
+The current way is a more simpler way for the time being, {company_name} is continuously working on its MANO module to stay updated with the specifications and in the near future it will have a unified way of managing VNF and CNFs in the similar way as VNFs are being managed.
+
+
+The only difference will be the “Prerequisites for the VNF Package Onboarding” will differ for CNFs when in comparison with the VNFs. The expected timelines for this will be shared in our project plan details.
+
+
+In the current implementation for Telekom Malaysia’s Telco Cloud 2.0 project we have a dedicated menu under Automation to manage the CNF lifecycle on the NFVI(K8s). Here the concept of describing the CNF will be the usual YAML based descriptor/s for K8s. Hence the steps involved are as follows:
+
+- Onboard the CNF onto the NFVO using the dedicated menu and provide the inputs like destination container based NFI (K8s cluster), CNF descriptor/s that we want to onboard which will create a new instance of the CNF in the menu.
+- Then on this new CNF instance one can perform the CNF lifecycle operations like start/stop/terminate
+- The YAML based CNF descriptors can also contain advanced information about how to manage replicas based on various factors which will then be managed natively by the container orchestrator. We will leverage this for the handling the scaling requirements of CNFs for now
+
+.CNF Lifecycle Management
+image:image13.png[width=800px]
+
+NOTE: Current implementation of Network Service LCM requires some simple customization to include CNFs in the Network service and the details of which will be handed over as a part of usage guidelines document and knowledge transfer during the initial delivery. But this will not be necessary after the new implementation of managing CNFs similar to VNFs.
+
+== CISM to NFV-MANO Mapping
+
+{company_name}'s' approach for the containerized infrastructure is the option of CISM distributed across VNFM and VIM which is as follows:
+
+
+.CISM to NFV-MANO mapping for TM Telco Cloud 2.0
+image:image1.png[width=800px]
+
+The light blue highlighted area in the above diagram shows the components implemented by {company_name} as a part of its MANO module where the MCIO Management module will be implemented which will translate the VNFD/NSD specific details of the CNFs into Managed Container Infrastructure Object (MCIO) operations that will be performed on the Kubernetes container orchestration platform (Container-specific virtual resource management)  which will then provision the actual resources on the Container Infrastructure Service (CIS) under the Kubernetes.
+
+== NS Lifecycle Management
+
+Following are the two aspects involved in the NS lifecycle management in the same order:
+
+- NS Package Management
+- NS Instance Lifecycle management
+
+=== NS Package Management
+
+This aspect is a prerequisite for NS Lifecycle Management. Following are the various stages in the VNF Package Management in the same order:
+
+- NS Package Creation: A NS package needs to be created for every NS that we want to manage under the MANO. This involves assigning a new NS package ID for every - NS package created in the NFVO which will be unique. This will make the NS appear in the NS catalog with status ‘CREATED’
+- NS Package Onboarding: The NS package needs to be onboarded with a NSD (and other relevant artifacts) which describes the structure and capabilities of the NS that we want to manage under this MANO. This will update the NS status in the NS catalog to ‘ONBOARDED’
+- NS Package Update: Currently Enable/Disable actions are supported for these steps due to the lack of ETSI specs on this point
+- NS Package Delete: When we do not need the NS anymore in the MANO, then we can decide to delete the NS package which will be the last step of the NS LCM.
+
+.Packages Management
+image:image14.png[width=800px]
+
+=== NS Instance Lifecycle Management
+
+These functions are in the scope of the NFVO module. 
+Following are the various stages in the NS Lifecycle Management in the same order:
+
+- NS Instance Creation: Once NS package is onboarded, we can start the NS LCM. This is a {product_name} specific step which will create a NS Instance in the NFVO. This is a prerequisite for further NS LCM operations.
+- NS LCM: The NS instance can now be operated for other lifecycle operations that include instantiation, stop, scale, heal and other NS operations of the NS. During the LCM management of the NS, MSA MANO module will leverage the Gnocchi module of the Openstack to monitor the VNF indicators that are necessary for monitoring the VNF components and trigger suitable actions for auto-scaling/healing actions of the NS instance.
+- NS Instance Deletion: This step is executed at the end of NS lifecycle in NFVO which removes the NS from the NS Instances list.
+- NS Instantiation
+- NS Scaling and healing
+- NS Termination
+
+=== VNF Forwarding Graph Management
+
+VNF Forwarding Graphs (VNFFG in short) play an important role in NS orchestration. They let users define the service function chaining of various participating VNFs using the SOL001 specification. The VNFFG Description is a part of NSD which has to be there while onboarding the NSD.
+
+We leverage the VNFFGs only under the NS context, hence NSDs will have VNFFG Descriptor within it. Specifying the VNFFG for a NS will be specified in the NSD itself following the SOL001 specifications for the NSD (thus VNFFGD)
+
+{company_name}’s MANO module will leverage Juniper Contrail’s Service Function Chaining interfaces to implement/realize the VNFFG in the backend for the network services while instantiating the network services.
+
+The user will be able to update the VNFFG for a given NS instance using the standard APIs which will also be leveraged in the GUI of {product_name} via suitable microservices/workflows based on the feasibility.
+
+
+== VNF Onboarding Pre-requisites
+
+This aspect is a prerequisite for any VNF. 
+For {product_name} MANO module to be able to onboard the VNF into its NFVO successfully following conditions have to be met:
+
+- VNF compatibility with the given VIM (including VIM version, networking requirements and so on) is all good. Usually this is addressed by the VNF vendors.
+- Ensure you have the required artifacts like VNFD as per the ETSI spec. For our project we support the SOL001 spec that is based on TOSCA. If the necessary artifacts are not available, then use the VNFD editor and create one based on the inputs from the VNF vendor
+- Upload the artifacts in a dedicated folder of {product_name} repository. And also create the images that are necessary for the VNF on the VIM as currently the behavior of the VIM (Openstack) API while uploading big images is unpredictable sometimes.
+
+The VNFD editor will allow the user to create, view and edit VNFD. It will be a TOSCA (yaml) editor fully integrated into the {product_name} UI. One of the main values  is to ease the creation of ETSI MANO compliant VNFD for VNF vendors that do not provide any ETSI MANO compliant VNFD.
+
+We can then perform the usual VNF Package management and VNF LCM. To be safe, we recommend that all of the above and the following activities are done in a staging/pre-production environment before following the same in the production environment.
+
+Following are the high-level activities that can be performed as a part of VNF package and Lifecycle management functions of the MANO module of MSA:
+
+
+- Create a VNF package for the intended VNF to be onboarded
+- Onboard the VNF in to the VNF package by choosing the corresponding artifact
+- Then under the VNF LCM menu, start the VNF instance lifecycle operations. The VNFM module of MSA will execute the related operations with the VIM as per the configurations specified in the VNFD
+- Once the VNF is not more required to be in service, we systematically follow the VNFM LCM stages and then later disable and delete the VNF package that will remove it from the VNF catalog
+
+NOTE: All of these operations on {product_name} have inherent northbound REST APIs that can be leveraged to build a CI/CD pipeline in the staging environment, test the VNF and when the results are satisfactory, run the production deployment for the same set of VNF artifacts
+
+== NSD Onboarding Pre-requisites
+
+For {product_name} MANO module to be able to onboard the NSD into its NFVO successfully the following conditions have to be met:
+
+- All the component VNFs of the NSD have to be onboarded before we can onboard a NSD
+- Ensure you have the required artifacts like NSD as per the ETSI spec. For our project we support the SOL001 spec that is based on TOSCA. If the necessary artifacts are not available, then use the NSD editor and create one based on the inputs from the domain expert for the network service
+- Upload the artifacts in a dedicated folder of {product_name} repository. And also create the images that are necessary for the VNF on the VIM as currently the behavior of the VIM (Openstack) API while uploading big images is unpredictable sometimes.
+
+The NSD editor will allow the user to create, view and edit NSD. It will be a TOSCA (yaml) editor fully integrated into the {product_name} UI as the VNFD editor. One of the main values  is to ease the creation of ETSI MANO compliant NSD for any type of VNF (ETSI MANO compliant as well as  non ETSI MANO compliant ones).
+
+We can then perform the usual NS Package management and NS LCM. To be safe, we recommend that all of the above and the following activities are done in a staging/pre-production environment before following the same in the production environment.
+
+Following are the high level activities that can be performed as a part of NS package and Lifecycle management functions of the MANO module of MSA:
+
+
+- Create a NS package for the intended NS to be onboarded
+- Onboard the NS in to the NS package by choosing the corresponding artifact
+-Then under the NS LCM menu, start the NS instance lifecycle operations. The NFVO module of MSA will execute the related operations with the VNFM and VIM as per the configurations specified in the NSD
+- Once the NS is no more required to be in service, we systematically follow the NS LCM stages and then later disable and delete the NS package that will remove it from the NS catalog
+
+NOTE: All of these operations on {product_name} have inherent northbound REST APIs that can be leveraged to build a CI/CD pipeline in the staging environment, test the VNF and when the results are satisfactory, run the production deployment for the same set of VNF artifacts
+
+== Integration inside the MANO stack
+
+In addition to the support for ETSI SOLxxx API {product_name} natively integrates Openstack including its neutron module using the Openstack API.  
+
+.Openstack Managed entity
+image:image15.png[width=800px]
+
+Developments will be done on the MANO module to extend this support for Contrail consuming the Contrail proprietary API and for other NFVI.
+
+This will be done by extending the Openstack adaptor and creating adaptors for the other NFVI.
+
+== Integration with third party S-VNFM
+
+=== ETSI Compliant S-VNFM
+
+An S-VNFM that is ETSI compliant will be similar to the G-VNFM of the {product_name} and hence there will be minimum (even none) integration efforts if any. 
+In {product_name} the VNFM module is treated as a Managed Entity and there are dedicated Microservice definitions defined for the User interaction with the VNFM. 
+Thus an ETSI compliant S-VNFM will just be another Managed Entity which has to be created and activated along with adding this new managed entity to the deployment settings of the VNFM profile.
+
+.Integrating MANO with third party VNFM that is compliant to ETSI Standards
+image:image9.png[width=800px]
+
+Apart from that adaptation the integration with the ETSI compliant S-VNFM involves the same set of operations as with the G-VNFM module of {product_name}
+
+=== Non-ETSI S-VNFM
+
+It will be a case-by-case basis and incur additional effort for the integration. Following diagram shows the high level design of the integration:
+
+.Integrating MANO with third party VNFM that is non-compliant to ETSI Standards
+image:image11.png[width=800px]
+
+The following steps describe how to integrate a non-ETSI compliant  S-VNFM with MSA and the steps involved in this integration process are in two stages:
+
+==== DevOps stage
+This is a one time activity that has to be performed to integrate with the new non-ETSI compliant S-VNFM. 
+
+This includes the following steps:
+
+- Build new Adaptor for the S-VNFM
+- Create the S-VNFM resources and microservice definitions
+- Create workflow to manage S-VNFM lifecycle management
+
+==== Operations stage
+
+This is a per S-VNFM instance activity and includes the following steps:
+
+- Add a new Managed Entity under a dedicated Subtenant and activate it
+- Create the Deployment settings including the necessary microservice definitions of the S-VNFM and attach the managed entity to it
+- Attach the S-VNFM’s VNF Lifecycle management workflow to the selected subtenant
+
+== Integration with LDAP
+
+In case there is a need to integrate the MANO module with a LDAP system over LDAPS protocol. 
+
+To serve this purpose, the configuration settings of the LDAP server have to be specified in MSA using the system level configuration variables. 
+For better user experience a dedicated workflow will be built to manage these specific system level configuration variables under a dedicated Tenant-Subtenant. 
+So that the users can launch the workflow process to setup/update the LDAP settings for the integration.
+
+The GUI would look like as shown below:
+
+.Setup new LDAP Server in {product_name}
+image:image2.png[width=800px]
+
+And once Setup LDAP is clicked, the user is presented the inputs necessary for the LDAP settings and then click on Run as shown below:
+
+.LDAP Configuration to integrate with {product_name}
+image:image2.png[width=800px]
+
+The actual details for the fields necessary will be explained in the LLD.
+
+NOTE: Once the LDAP integration is enabled, normal user creation will be disabled in the {product_name}
+
+
+There are also some attributes that need to be set up on the LDAP server to specify following information on {product_name}:
+
+- The role of the user in {product_name}
+- Tenant/s under which the user needs to be created
+- Subtenant under which the user needs to be created for Manager accounts.

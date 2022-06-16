@@ -1,0 +1,22 @@
+= {company_name} MANO module: Java implementation
+ifndef::imagesdir[:imagesdir: images]
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:toc: left
+:toclevels: 3
+
+
+//OK HTML 
+ifdef::html[]
+:includedir: doc-src/etsi-mano-java
+endif::[]
+
+
+:leveloffset: +1
+
+This documentation contains a set of tutorials and examples to help you get familiar with the {product_name} as a development platform.
+
+include::{includedir}/vnffg.adoc[]
+
+include::{includedir}/auth-cert.adoc[]
+
+include::{includedir}/auth-oauth2.adoc[]

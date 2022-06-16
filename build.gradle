@@ -38,7 +38,7 @@ asciidoctor {
     'linkcss': true,
     'ubiqube': 'UBiqube',
     'company_name': 'UBiqube',
-    'product_name': 'ETSI-MANO',
+    'product_name': 'MSActivator(TM)',
     'openmsa_name': 'OpenMSA(TM)',
     'revnumber': 'ETSI-MANO-2.8.1',
     'allow-uri-read': '',
