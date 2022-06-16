@@ -1,4 +1,4 @@
-= {company_name} MANO module
+= {openmsa_name} MANO module
 ifndef::imagesdir[:imagesdir: images]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
@@ -107,7 +107,7 @@ NOTE: All of these operations on {product_name} have inherent northbound REST AP
 
 As explained in the introduction section of this document currently the way CNFs are being handled in a different way than CNFs and hence this dedicated section.
 
-The current way is a more simpler way for the time being, {company_name} is continuously working on its MANO module to stay updated with the specifications and in the near future it will have a unified way of managing VNF and CNFs in the similar way as VNFs are being managed.
+The current way is a more simpler way for the time being, {openmsa_name} is continuously working on its MANO module to stay updated with the specifications and in the near future it will have a unified way of managing VNF and CNFs in the similar way as VNFs are being managed.
 
 
 The only difference will be the “Prerequisites for the VNF Package Onboarding” will differ for CNFs when in comparison with the VNFs. The expected timelines for this will be shared in our project plan details.
@@ -126,13 +126,13 @@ NOTE: Current implementation of Network Service LCM requires some simple customi
 
 == CISM to NFV-MANO Mapping
 
-{company_name}'s' approach for the containerized infrastructure is the option of CISM distributed across VNFM and VIM which is as follows:
+{openmsa_name}'s' approach for the containerized infrastructure is the option of CISM distributed across VNFM and VIM which is as follows:
 
 
 .CISM to NFV-MANO mapping for TM Telco Cloud 2.0
 image:image1.png[width=800px]
 
-The light blue highlighted area in the above diagram shows the components implemented by {company_name} as a part of its MANO module where the MCIO Management module will be implemented which will translate the VNFD/NSD specific details of the CNFs into Managed Container Infrastructure Object (MCIO) operations that will be performed on the Kubernetes container orchestration platform (Container-specific virtual resource management)  which will then provision the actual resources on the Container Infrastructure Service (CIS) under the Kubernetes.
+The light blue highlighted area in the above diagram shows the components implemented by {openmsa_name} as a part of its MANO module where the MCIO Management module will be implemented which will translate the VNFD/NSD specific details of the CNFs into Managed Container Infrastructure Object (MCIO) operations that will be performed on the Kubernetes container orchestration platform (Container-specific virtual resource management)  which will then provision the actual resources on the Container Infrastructure Service (CIS) under the Kubernetes.
 
 == NS Lifecycle Management
 
@@ -171,7 +171,7 @@ VNF Forwarding Graphs (VNFFG in short) play an important role in NS orchestratio
 
 We leverage the VNFFGs only under the NS context, hence NSDs will have VNFFG Descriptor within it. Specifying the VNFFG for a NS will be specified in the NSD itself following the SOL001 specifications for the NSD (thus VNFFGD)
 
-{company_name}’s MANO module will leverage Juniper Contrail’s Service Function Chaining interfaces to implement/realize the VNFFG in the backend for the network services while instantiating the network services.
+{openmsa_name}’s MANO module will leverage Juniper Contrail’s Service Function Chaining interfaces to implement/realize the VNFFG in the backend for the network services while instantiating the network services.
 
 The user will be able to update the VNFFG for a given NS instance using the standard APIs which will also be leveraged in the GUI of {product_name} via suitable microservices/workflows based on the feasibility.
 
