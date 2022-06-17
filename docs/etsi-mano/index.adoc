@@ -113,7 +113,7 @@ The current way is a more simpler way for the time being, OpenMSA(TM) is continu
 The only difference will be the “Prerequisites for the VNF Package Onboarding” will differ for CNFs when in comparison with the VNFs. The expected timelines for this will be shared in our project plan details.
 
 
-In the current implementation for Telekom Malaysia’s Telco Cloud 2.0 project we have a dedicated menu under Automation to manage the CNF lifecycle on the NFVI(K8s). Here the concept of describing the CNF will be the usual YAML based descriptor/s for K8s. Hence the steps involved are as follows:
+We have a dedicated menu under Automation to manage the CNF lifecycle on the NFVI(K8s). Here the concept of describing the CNF will be the usual YAML based descriptor/s for K8s. Hence the steps involved are as follows:
 
 - Onboard the CNF onto the NFVO using the dedicated menu and provide the inputs like destination container based NFI (K8s cluster), CNF descriptor/s that we want to onboard which will create a new instance of the CNF in the menu.
 - Then on this new CNF instance one can perform the CNF lifecycle operations like start/stop/terminate
