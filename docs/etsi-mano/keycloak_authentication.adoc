@@ -67,16 +67,16 @@ Realm Name : mano-realm
 Enabled: On
 Once created, the realm clients must be configured:
 
-==== Create first Client mano-nfvo: 
-General Settings
-Client Type: OpenID Connect
-Client ID: mano-nfvo
-Name: mano-nfvo
-Capability Config
-Client Authentication: On
-Authorization: On
-Access Settings
-Valid redirect URI: http://auth/*
+==== Create first Client mano-nfvo
+* General Settings
+** Client Type: OpenID Connect
+** Client ID: mano-nfvo
+** Name: mano-nfvo
+* Capability Config
+** Client Authentication: On
+** Authorization: On
+* Access Settings
+** Valid redirect URI: http://auth/*
 
 ==== Create a new Realm Role NFVO
 Role Name: NFVO
@@ -85,16 +85,17 @@ Select the client mano-vnfm, navigate to “Service Account Roles” and click �
 
 Verify that the role is listed in the Client roles
 
-==== Create second Client mano-vnfm: 
-General Settings
-Client Type: OpenID Connect
-Client ID: mano-vnfm
-Name: mano-vnfm
-Capability Config
-Client Authentication: On
-Authorization: On
-Access Settings
-Valid redirect URI: http://auth/*
+==== Create second Client mano-vnfm
+
+* General Settings
+** Client Type: OpenID Connect
+** Client ID: mano-vnfm
+** Name: mano-vnfm
+* Capability Config
+** Client Authentication: On
+** Authorization: On
+* Access Settings
+** Valid redirect URI: http://auth/*
 
 ==== Create a new Realm Role VNFM
 Role Name: VNFM
