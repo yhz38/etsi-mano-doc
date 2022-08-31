@@ -43,4 +43,4 @@ Keycloak service is included in the MSActivator docker stack services "mano-auth
 
 Keycloak admin console is available at link:https://MSA-IP:8110/[https://MSA-IP:8110/]
 
-image:keycloak_1.png[width=800px]
+image:keycloak_1.png[width=700px]
