@@ -44,3 +44,70 @@ Keycloak service is included in the MSActivator docker stack services "mano-auth
 Keycloak admin console is available at link:https://MSA-IP:8110/[https://MSA-IP:8110/]
 
 image:keycloak_1.png[width=700px]
+
+==== Credential update
+
+Login to the admin console with the login credentials set in the docker stack config
+
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: ubiqube
+
+The default credentials are admin/ubiqube.
+To update the credentials, login as admin:
+go to “Manage Account” (top right, under Admin)
+click “signing In” and update the password
+
+==== Realm Management
+A new Realm must be created prior to be able to use the MANO modules
+
+A realm manages a set of users, credentials, roles, and groups. A user belongs to and logs into a realm. Realms are isolated from one another and can only manage and authenticate the users that they control.
+
+When creating a realm, the following configuration must be provided:
+Realm Name : mano-realm
+Enabled: On
+Once created, the realm clients must be configured:
+
+==== Create first Client mano-nfvo: 
+General Settings
+Client Type: OpenID Connect
+Client ID: mano-nfvo
+Name: mano-nfvo
+Capability Config
+Client Authentication: On
+Authorization: On
+Access Settings
+Valid redirect URI: http://auth/*
+
+==== Create a new Realm Role NFVO
+Role Name: NFVO
+
+Select the client mano-vnfm, navigate to “Service Account Roles” and click “Assign Role” to assign the Realm Role to the client
+
+Verify that the role is listed in the Client roles
+
+==== Create second Client mano-vnfm: 
+General Settings
+Client Type: OpenID Connect
+Client ID: mano-vnfm
+Name: mano-vnfm
+Capability Config
+Client Authentication: On
+Authorization: On
+Access Settings
+Valid redirect URI: http://auth/*
+
+==== Create a new Realm Role VNFM
+Role Name: VNFM
+
+Select the client mano-vnfm, navigate to “Service Account Roles” and click “Assign Role” to assign the Realm Role to the client
+
+Verify that the role is listed in the Client roles
+
+==== Realm verification
+For each client, copy the client secret from Client-Credential and execute the curl request as below
+
+----
+curl -X POST 'http://[IP]:8110/realms/mano-realm/protocol/openid-connect/token'  --header 'Content-Type: application/x-www-form-urlencoded'  --data-urlencode 'grant_type=client_credentials'  --data-urlencode 'client_id=mano-nfvo'  --data-urlencode 'client_secret=nKDcyoBL5GAhkmGJYLxPbytTUGeK1jtb' -s
+----
+
+copy the access_token from the response and use jwt.io to verify the token:
