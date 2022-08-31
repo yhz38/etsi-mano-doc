@@ -4,11 +4,11 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 
 == Introduction
-This section gives a high-level description of how MSActivator(TM)  manages the VNF/NS LCM leveraging its MANO module along with the workflow module.
+This section gives a high-level description of how MSActivator(TM) manages the VNF/NS LCM leveraging its MANO module along with the workflow module.
 
 The MANO module of MSActivator(TM) is an ETSI compliant module supporting standard interfaces as per the ETSI specification for NFVO and VNFM modules.
 
-Following is a standard reference architecture of ETSI MANO highlighting MSActivator(TM)’s role in the reference architecture.
+Following is a standard reference architecture of ETSI MANO highlighting MSActivator(TM) role in the reference architecture.
 
 .MSActivator(TM) in ETSI MANO
 image:image5.png[width=800px]
@@ -17,7 +17,7 @@ MSActivator(TM) has a dedicated module called the MANO module which has the impl
 
 All the workflow processes and microservice libraries that we have are built which consume the ETSI APIs of the MANO module in the backend. To perform the lifecycle management of VNFs and CNFs, we have dedicated workflows at various stages
 
-Following is the high level diagram that shows how MSActivator(TM)’s MANO modules works.
+Following is the high level diagram that shows how MSActivator(TM) MANO modules works.
 
 .Software Architecture for VNF and CNF orchestration
 image:image6.png[width=800px]
@@ -50,8 +50,8 @@ VNF Lifecycle Management is done via a set of predefined workflows that the user
 
 This aspect is a prerequisite for VNF Lifecycle Management.Following are the various stages in the VNF Package Management in the same order:
 
-- VNF Package Creation: A VNF package needs to be created for every VNF that we want to manage under the MANO. This involves assigning a new VNF package ID for every VNF package created in the NFVO which will be unique. This will make the VNF appear in the VNF catalog with status ‘CREATED’
-- VNF Package Onboarding: The VNF package needs to be onboarded with a VNFD (and other relevant artifacts) which describes the structure and capabilities of the VNF that we want to manage under this MANO. This will update the VNF status in the VNF catalog to ‘ONBOARDED’
+- VNF Package Creation: A VNF package needs to be created for every VNF that we want to manage under the MANO. This involves assigning a new VNF package ID for every VNF package created in the NFVO which will be unique. This will make the VNF appear in the VNF catalog with status "CREATED"
+- VNF Package Onboarding: The VNF package needs to be onboarded with a VNFD (and other relevant artifacts) which describes the structure and capabilities of the VNF that we want to manage under this MANO. This will update the VNF status in the VNF catalog to "ONBOARDED"
 - VNF Package Update: Currently Enable/Disable actions are supported for these steps due to the lack of ETSi specs on this point
 - VNF Package Delete: When we do not need the VNF anymore in the MANO, then we can decide to delete the VNF package which will be the last step of the VNF LCM.
 
@@ -110,7 +110,7 @@ As explained in the introduction section of this document currently the way CNFs
 The current way is a more simpler way for the time being, OpenMSA(TM) is continuously working on its MANO module to stay updated with the specifications and in the near future it will have a unified way of managing VNF and CNFs in the similar way as VNFs are being managed.
 
 
-The only difference will be the “Prerequisites for the VNF Package Onboarding” will differ for CNFs when in comparison with the VNFs. The expected timelines for this will be shared in our project plan details.
+The only difference will be the "Prerequisites for the VNF Package Onboarding" will differ for CNFs when in comparison with the VNFs. The expected timelines for this will be shared in our project plan details.
 
 
 We have a dedicated menu under Automation to manage the CNF lifecycle on the NFVI(K8s). Here the concept of describing the CNF will be the usual YAML based descriptor/s for K8s. Hence the steps involved are as follows:
@@ -145,8 +145,8 @@ Following are the two aspects involved in the NS lifecycle management in the sam
 
 This aspect is a prerequisite for NS Lifecycle Management. Following are the various stages in the VNF Package Management in the same order:
 
-- NS Package Creation: A NS package needs to be created for every NS that we want to manage under the MANO. This involves assigning a new NS package ID for every - NS package created in the NFVO which will be unique. This will make the NS appear in the NS catalog with status ‘CREATED’
-- NS Package Onboarding: The NS package needs to be onboarded with a NSD (and other relevant artifacts) which describes the structure and capabilities of the NS that we want to manage under this MANO. This will update the NS status in the NS catalog to ‘ONBOARDED’
+- NS Package Creation: A NS package needs to be created for every NS that we want to manage under the MANO. This involves assigning a new NS package ID for every - NS package created in the NFVO which will be unique. This will make the NS appear in the NS catalog with status "CREATED"
+- NS Package Onboarding: The NS package needs to be onboarded with a NSD (and other relevant artifacts) which describes the structure and capabilities of the NS that we want to manage under this MANO. This will update the NS status in the NS catalog to "ONBOARDED"
 - NS Package Update: Currently Enable/Disable actions are supported for these steps due to the lack of ETSI specs on this point
 - NS Package Delete: When we do not need the NS anymore in the MANO, then we can decide to delete the NS package which will be the last step of the NS LCM.
 
@@ -237,7 +237,7 @@ This will be done by extending the Openstack adaptor and creating adaptors for t
 === ETSI Compliant S-VNFM
 
 An S-VNFM that is ETSI compliant will be similar to the G-VNFM of the MSActivator(TM) and hence there will be minimum (even none) integration efforts if any. 
-In MSActivator(TM) the VNFM module is treated as a Managed Entity and there are dedicated Microservice definitions defined for the User interaction with the VNFM. 
+In MSActivator(TM) the VNFM module is treated as a Managed Entity and there are dedicated microservice definitions defined for the User interaction with the VNFM. 
 Thus an ETSI compliant S-VNFM will just be another Managed Entity which has to be created and activated along with adding this new managed entity to the deployment settings of the VNFM profile.
 
 .Integrating MANO with third party VNFM that is compliant to ETSI Standards
@@ -269,7 +269,7 @@ This is a per S-VNFM instance activity and includes the following steps:
 
 - Add a new Managed Entity under a dedicated Subtenant and activate it
 - Create the Deployment settings including the necessary microservice definitions of the S-VNFM and attach the managed entity to it
-- Attach the S-VNFM’s VNF Lifecycle management workflow to the selected subtenant
+- Attach the S-VNFM VNF Lifecycle management workflow to the selected subtenant
 
 == Integration with LDAP
 

@@ -1,0 +1,46 @@
+= Keycloak authentication
+ifndef::imagesdir[:imagesdir: images]
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+
+== Introduction
+
+link:https://www.keycloak.org/[Keycloak] is used to secure the communication between the NFVO and the VNFM.
+
+Keycloak is a single sign-on solution for web apps and RESTful web services. 
+The goal of Keycloak is to make security simple so that it is easy for application developers to secure the apps and services they have deployed in their organization. 
+Security features that developers normally have to write for themselves are provided out of the box and are easily tailorable to the individual requirements of your organization. 
+Keycloak provides customizable user interfaces for login, registration, administration, and account management.
+
+=== Keycloak setup and configuration
+
+----
+Keycloak service is included in the MSActivator docker stack services "mano-auth".
+
+  mano-auth:
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - "node.labels.worker==app"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: ubiqube
+      DB_VENDOR: postgres
+      DB_ADDR: mano-db
+      POSTGRES_ADDR: mano-db
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      JGROUPS_DISCOVERY_PROTOCOL: JDBC_PING
+      JGROUPS_DISCOVERY_PROPERTIES: "datasource_jndi_name=java:jboss/datasources/KeycloakDS"
+    image: jboss/keycloak
+    ports:
+      - target: 8080
+        published: 8110
+        protocol: tcp
+        mode: ingress
+----
+
+Keycloak admin console is available at link:https://MSA-IP:8110/[https://MSA-IP:8110/]
+
+image:keycloak_1.png[width=800px]
