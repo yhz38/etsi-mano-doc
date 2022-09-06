@@ -2,6 +2,10 @@
 ifndef::imagesdir[:imagesdir: images]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
+== Resources
+
+* link:configuration{outfilesuffix}[Configuration,window=_blank]
+* link:keycloak_authentication{outfilesuffix}[Keycloak Authentication,window=_blank]
 
 == Introduction
 This section gives a high-level description of how MSActivator(TM) manages the VNF/NS LCM leveraging its MANO module along with the workflow module.

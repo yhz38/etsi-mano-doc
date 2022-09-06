@@ -54,8 +54,8 @@ Login to the admin console with the login credentials set in the docker stack co
 
 The default credentials are admin/ubiqube.
 To update the credentials, login as admin:
-go to “Manage Account” (top right, under Admin)
-click “signing In” and update the password
+go to "Manage Account" (top right, under Admin)
+click "signing In" and update the password
 
 ==== Realm Management
 A new Realm must be created prior to be able to use the MANO modules
@@ -63,8 +63,10 @@ A new Realm must be created prior to be able to use the MANO modules
 A realm manages a set of users, credentials, roles, and groups. A user belongs to and logs into a realm. Realms are isolated from one another and can only manage and authenticate the users that they control.
 
 When creating a realm, the following configuration must be provided:
-Realm Name : mano-realm
-Enabled: On
+
+* Realm Name : mano-realm
+* Enabled: On
+
 Once created, the realm clients must be configured:
 
 ==== Create first Client mano-nfvo
@@ -81,7 +83,7 @@ Once created, the realm clients must be configured:
 ==== Create a new Realm Role NFVO
 Role Name: NFVO
 
-Select the client mano-vnfm, navigate to “Service Account Roles” and click “Assign Role” to assign the Realm Role to the client
+Select the client mano-vnfm, navigate to "Service Account Roles" and click "Assign Role" to assign the Realm Role to the client
 
 Verify that the role is listed in the Client roles
 
@@ -100,7 +102,7 @@ Verify that the role is listed in the Client roles
 ==== Create a new Realm Role VNFM
 Role Name: VNFM
 
-Select the client mano-vnfm, navigate to “Service Account Roles” and click “Assign Role” to assign the Realm Role to the client
+Select the client mano-vnfm, navigate to "Service Account Roles" and click "Assign Role" to assign the Realm Role to the client
 
 Verify that the role is listed in the Client roles
 
@@ -112,3 +114,9 @@ curl -X POST 'http://[IP]:8110/realms/mano-realm/protocol/openid-connect/token' 
 ----
 
 copy the access_token from the response and use jwt.io to verify the token:
+
+image:keycloak_2.png[width=700px]
+
+Once configured, the realm can be edited:
+
+image:keycloak_3.png[width=700px]
