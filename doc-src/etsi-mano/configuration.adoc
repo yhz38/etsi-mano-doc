@@ -1,0 +1,49 @@
+== Understading configuration
+
+Mano module is using Spring cloud configuration.
+
+=== Environment configuration
+By default all Environment variables have precedence over all other configurations. The conversion rules are simple.
+from a yaml / properties file all the key will be in upper case and all punctuation have to be replace by `_`
+
+[source, yaml]
+-----
+mano:
+  frontend-url:
+-----
+The result will be `MANO_FRONTEND_URL`
+
+=== mano-config module
+Mano-config module allow you to define a `$HOME/.mano/configuration.properties` file. This file is the same as the old
+spring `.properties` files, but this file have precedence over the webapp one.
+
+The is also a second mechanism that allow you to override some values for a given `tag`
+Typically it came out of the box with 2 tags `vnfm` and `nfvo`.
+
+[source,yaml]
+-----
+mano:
+  config:
+    folder: // <1>
+    type: // <2>
+-----
+<1> The folder absolute path IE `/home/ncuser/.mano/`
+<2> One tag for overriding the configuration keys IE: `vnfm` or `nfvo`
+
+=== Docker swarm module
+Use docker secret to override some configuration keys.
+Refer to official documentation of secrets: https://docs.docker.com/engine/swarm/secrets/
+
+As keys are converted to files, we need the spring flat representation of a key. This format is the correct one `mano.frontend-url`
+
+And provide the value using the secret docker API.
+
+[source,yaml]
+-----
+mano:
+  config:
+    docker:
+      bind-path: // <1>
+-----
+
+<1> The default bind path is `/run/secrets` but you can change it using the above configuration.
