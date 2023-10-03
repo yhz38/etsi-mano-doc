@@ -19,6 +19,14 @@ spring `.properties` files, but this file have precedence over the webapp one.
 
 The is also a second mechanism that allow you to override some values for a given `tag`
 Typically it came out of the box with 2 tags `vnfm` and `nfvo`.
+With those two tags you may have 3 files.
+-----
+$HOME/.mano/configuration.properties
+$HOME/.mano/configuration_vnfm.properties
+$HOME/.mano/configuration_nfvo.properties
+-----
+
+==== Configuration
 
 [source,yaml]
 -----
@@ -37,6 +45,8 @@ Refer to official documentation of secrets: https://docs.docker.com/engine/swarm
 As keys are converted to files, we need the spring flat representation of a key. This format is the correct one `mano.frontend-url`
 
 And provide the value using the secret docker API.
+
+==== Configuration
 
 [source,yaml]
 -----
