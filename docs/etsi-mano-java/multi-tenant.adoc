@@ -1,4 +1,4 @@
-= Multi tenantcy
+= Multi tenancy
 Multi tenant, allow attribute instances and vim to a given tenant driven by it's credentials.
 
 == OAuth2 (keycloak)
