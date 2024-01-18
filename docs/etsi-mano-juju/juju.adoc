@@ -1,0 +1,728 @@
+*Table Of Content*
+
+link:#starting-juju-server[1. Starting juju server:
+link:#starting-juju-server[3]]
+
+link:#cloud[2. Cloud: link:#cloud[4]]
+
+link:#a.-adding-a-cloud-in-juju[a. Adding a cloud in Juju :
+link:#a.-adding-a-cloud-in-juju[4]]
+
+link:#b.-list-of-clouds-in-juju[b. List of clouds in Juju :
+link:#b.-list-of-clouds-in-juju[4]]
+
+link:#c.-show-cloud-details-in-juju[c. Show cloud details in Juju:
+link:#c.-show-cloud-details-in-juju[5]]
+
+link:#d.-delete-a-cloud-in-juju[d. Delete a cloud in Juju:
+link:#d.-delete-a-cloud-in-juju[5]]
+
+link:#credential[3. Credential: link:#credential[5]]
+
+link:#a.-adding-a-credential-to-cloud-in-juju[a. Adding a credential to
+cloud in juju: link:#a.-adding-a-credential-to-cloud-in-juju[5]]
+
+link:#b.-list-of-credentials-in-juju[b. List of credentials in Juju:
+link:#b.-list-of-credentials-in-juju[6]]
+
+link:#c.-update-credential-to-the-cloud-in-juju[c. Update credential to
+the cloud in Juju: link:#c.-update-credential-to-the-cloud-in-juju[6]]
+
+link:#d.-show-credential-detail-for-a-cloud-in-juju[d. Show credential
+detail for a cloud in Juju:
+link:#d.-show-credential-detail-for-a-cloud-in-juju[6]]
+
+link:#e.-delete-credential-for-one-particular-cloud-in-juju[e. Delete
+credential for one particular cloud in Juju:
+link:#e.-delete-credential-for-one-particular-cloud-in-juju[7]]
+
+link:#controller[4. Controller: link:#controller[7]]
+
+link:#a.-adding-a-controller-in-juju[a. Adding a controller in Juju:
+link:#a.-adding-a-controller-in-juju[7]]
+
+link:#b.-list-of-controllers-in-juju[b. List of controllers in Juju:
+link:#b.-list-of-controllers-in-juju[8]]
+
+link:#c.-show-details-of-controller-in-juju[c. Show details of
+controller in Juju: link:#c.-show-details-of-controller-in-juju[8]]
+
+link:#d.-delete-controller-in-juju[d. Delete controller in Juju:
+link:#d.-delete-controller-in-juju[8]]
+
+link:#model[5. Model: link:#model[8]]
+
+link:#a.-add-model-in-juju[a. Add model in Juju:
+link:#a.-add-model-in-juju[8]]
+
+link:#b.-show-one-model-in-juju[b. Show one model in Juju:
+link:#b.-show-one-model-in-juju[8]]
+
+link:#c.-list-of-models-in-juju[c. List of models in Juju:
+link:#c.-list-of-models-in-juju[9]]
+
+link:#d.-delete-model-in-juju[d. Delete model in Juju:
+link:#d.-delete-model-in-juju[9]]
+
+link:#application[6. Application: link:#application[9]]
+
+link:#a.-deploy-application-juju[a. Deploy Application Juju:
+link:#a.-deploy-application-juju[9]]
+
+link:#b.-get-application-in-juju[b. Get Application in Juju:
+link:#b.-get-application-in-juju[9]]
+
+link:#c.-delete-application-in-juju[c. Delete Application in Juju:
+link:#c.-delete-application-in-juju[10]]
+
+link:#status[7. Status: link:#status[10]]
+
+link:#nfvo[8. Nfvo: link:#nfvo[10]]
+
+link:#a.-register-server[a. Register server:
+link:#a.-register-server[10]]
+
+link:#b.-register-vim-for-nfvo[b. Register vim for nfvo:
+link:#b.-register-vim-for-nfvo[11]]
+
+link:#vnfm[9. Vnfm: link:#vnfm[12]]
+
+link:#a.-register-server-1[a. Register server:
+link:#a.-register-server-1[12]]
+
+link:#b.-register-vim-for-vnfm[b. Register vim for vnfm:
+link:#b.-register-vim-for-vnfm[13]]
+
+== 1. Starting juju server: 
+
+[loweralpha]
+. Open Juju Terminal via xterm
+
+IP 10.31.1.242 (mano-juju)
+
+{empty}b. juju-webapp.jar file in Workspace folder, so you need to
+inside Workspace folder to start juju server. Use these below commands
+to start juju server.
+
+cd Workspace/ to go inside Workspace folder
+
+java -jar juju-webapp.jar & to start juju server in background
+
+{empty}c. After running above command , it will start the juju server ,
+last it will show ---
+
+Started JujuWebapp Application in some milliseconds.
+
+== 2. Cloud:
+
+===  a. Adding a cloud in Juju :
+
+url : http://10.31.1.242:8200/juju/cloud
+
+json data to register one cloud :
+
+curl --location 'http://10.31.1.242:8200/juju/cloud' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: application/json' \
+
+--data '\{
+
+  "name": "openstack-inari-108",
+
+  "type": "openstack",
+
+  "authTypes": "[userpass]",
+
+  "regions": [
+
+    \{
+
+      "name": "RegionOne",
+
+      "endPoint": "http://10.31.1.108:5000/v3"
+
+    }
+
+  ]
+
+}'
+
+=== b. List of clouds in Juju :
+
+url : http://10.31.1.242:8200/juju/cloud
+
+curl --location 'http://10.31.1.242:8200/juju/cloud' \
+
+--header 'Accept: application/json'
+
+=== c. Show cloud details in Juju:
+
+url : http://10.31.1.242:8200/juju/cloud/openstack-inari-108
+
+curl --location 'http://10.31.1.242:8200/juju/cloud/openstack-inari-108' \
+
+--header 'Accept: application/json'
+
+=== d. Delete a cloud in Juju:
+
+Url: http://10.31.1.242:8200/juju/cloud/openstack-inari-108
+
+curl --location --request DELETE 'http://10.31.1.242:8200/juju/cloud/openstack-inari-108' \
+
+--header 'Accept: application/json'
+
+== 3. Credential: 
+
+=== a. Adding a credential to cloud in juju:
+
+Url: http://10.31.1.242:8200/juju/credential
+
+curl --location 'http://10.31.1.242:8200/juju/credential' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: application/json' \
+
+--data '\{
+
+  "name": "openstack-inari-108",
+
+  "type": "openstack",
+
+  "authTypes": "[userpass]",
+
+  "regions": [
+
+    \{
+
+      "name": "RegionOne",
+
+      "endPoint": "http://10.31.1.108:5000/v3"
+
+    }
+
+    ],
+
+  "credential": \{
+
+    "name": "inari-admin-tenant",
+
+    "authType": "userpass",
+
+    "username": "admin",
+
+    "password": "9f865149f0b64c92",
+
+    "tenantName": "admin"
+
+  }
+
+}'
+
+=== b. List of credentials in Juju:
+
+Url: http://10.31.1.242:8200/juju/credential
+
+http://10.31.1.242:8200/juju/credential[curl --location ]'http://10.31.1.242:8200/juju/credential' \
+
+--header 'Accept: application/json'
+
+=== c. Update http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant[credential] to the cloud in Juju:
+
+Url: http://10.31.1.242:8200/juju/credential
+
+curl --location --request PUT 'http://10.31.1.242:8200/juju/credential' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: application/json' \
+
+--data '\{
+
+  "name": "openstack-inari-108",
+
+  "type": "openstack",
+
+  "authTypes": "[userpass]",
+
+  "regions": [
+
+    \{
+
+      "name": "RegionOne",
+
+      "endPoint": "http://10.31.1.108:5000/v3"
+
+    }
+
+    ],
+
+  "credential": \{
+
+    "name": "inari-admin-tenant",
+
+    "authType": "userpass",
+
+    "username": "admin",
+
+    "password": "9f865149f0b64c92",
+
+    "tenantName": "admin"
+
+  }
+
+}'
+
+=== d. Show http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant[credential] detail for a cloud in Juju:
+
+Url:
+http://10.31.1.242:8200/juju/cloud/openstack-inari-108[http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant]
+
+curl --location 'http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant' \
+
+--header 'Accept: application/json'
+
+=== e. Delete http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant[credential] for one particular cloud in Juju:
+
+url:
+http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant
+
+curl --location --request DELETE 'http://10.31.1.242:8200/juju/credential/openstack-inari-108/inari-admin-tenant' \
+
+--header 'Accept: application/json'
+
+[.underline]# +
+#
+
+== 4. Controller:
+
+=== a. Adding a controller in Juju:
+
+Url : http://10.31.1.242:8200/juju/controller/openstack-inari-108
+
+curl --location 'http://10.31.1.242:8200/juju/controller/openstack-inari-108' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: application/json' \
+
+--data '\{
+
+  "name": "openstack-inari-108-controller",
+
+  "imageId": "9f326f5f-7839-4928-9722-ad51ca97b478",
+
+  "path": "~/simplestreams",
+
+  "osSeries": "jammy",
+
+  "osAuthUrl": "http://10.31.1.108:5000",
+
+  "constraints": [
+
+    "arch=amd64"
+
+  ],
+
+  "networkId": "82dbcdf4-82d3-4e95-9244-550673250dad",
+
+  "regionName": "RegionOne",
+
+  "models": [
+
+    \{
+
+      "name": "k8s-ubi-model-kt",
+
+      "appName": "ubi-k8s-cluster"
+
+    }
+
+  ]
+
+}'
+
+=== b. List of controllers in Juju:
+
+Url : http://10.31.1.242:8200/juju/controller
+
+curl --location 'http://10.31.1.242:8200/juju/controller' \
+
+--header 'Accept: application/json'
+
+=== c. Show details of controller in Juju:
+
+Url :
+http://10.31.1.242:8200/juju/controller/openstack-inari-108-controller
+
+curl --location 'http://10.31.1.242:8200/juju/controller/openstack-inari-108-controller' \
+
+--header 'Accept: application/json'
+
+=== d. Delete controller in Juju:
+
+Url :
+http://10.31.1.242:8200/juju/controller/openstack-inari-108-controller
+
+curl --location --request DELETE 'http://10.31.1.242:8200/juju/controller/openstack-inari-108-controller' \
+
+--header 'Accept: application/json'
+
+== 5. Model:
+
+=== a. Add model in Juju:
+
+Url : [.underline]#http://10.31.1.242:8200/juju/model/mymodel#
+
+curl --location --request POST 'http://10.31.1.242:8200/juju/model/mymodel' \
+
+--header 'Accept: application/json'
+
+=== b. Show one model in Juju:
+
+url : http://10.31.1.242:8200/juju/model/mymodel
+
+curl --location 'http://10.31.1.242:8200/juju/model/mymodel' \
+
+--header 'Accept: application/json'
+
+=== c. List of models in Juju:
+
+Url : http://10.31.1.242:8200/juju/model
+
+curl --location 'http://10.31.1.242:8200/juju/model' \
+
+--header 'Accept: application/json'
+
+=== d. Delete model in Juju:
+
+Url : http://10.31.1.242:8200/juju/model/mymodel
+
+curl --location --request DELETE 'http://10.31.1.242:8200/juju/model/mymodel' \
+
+--header 'Accept: application/json'
+
+== 6. Application:
+
+=== a. Deploy Application Juju:
+
+Url :
+[.underline]#http://10.31.1.242:8200/juju/application/kubernetes-core/ubi-k8s-cluster#
+
+curl --location --request POST 'http://10.31.1.242:8200/juju/application/kubernetes-core/ubi-k8s-cluster' \
+
+--header 'Accept: application/json'
+
+=== b. Get Application in Juju:
+
+Url : http://10.31.1.242:8200/juju/application/calico
+
+curl --location 'http://10.31.1.242:8200/juju/application/calico' \
+
+--header 'Accept: application/json'
+
+=== 
+
+=== c. Delete Application in Juju:
+
+Url : http://10.31.1.242:8200/juju/application/calico
+
+curl --location --request DELETE 'http://10.31.1.242:8200/juju/application/calico' \
+
+--header 'Accept: application/json'
+
+== 7. Status:
+
+Url : http://10.31.1.242:8200/juju/status
+
+[.underline]#curl --location 'http://10.31.1.242:8200/juju/status' \#
+
+--header 'Accept: application/json'
+
+== 8. Nfvo:
+
+=== a. Register server:
+
+Url:
+[.underline]#http://192.168.230.128:8100/ubi-etsi-mano/admin/server#
+
+curl --location 'http://192.168.230.128:8100/ubi-etsi-mano/admin/server' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: */*' \
+
+--header 'Authorization: Bearer xxxxxx' \
+
+--data '\{
+
+    "name": "vnfm-1",
+
+    "authentification": \{
+
+        "authType": [
+
+            "OAUTH2_CLIENT_CREDENTIALS"
+
+        ],
+
+        "authParamOauth2": \{
+
+            "clientId": "mano-nfvo",
+
+            "clientSecret": "ed9aeb6d-3ea5-4392-bb22-835603cf3dfc",
+
+            "tokenEndpoint": "http://auth.mano.ubiqube.com/auth/realms/mano-realm/protocol/openid-connect/token",
+
+            "o2Username": "admin",
+
+            "o2Password": "pass",
+
+            "o2IgnoreSsl": true,
+
+            "grantType": "client_credentials"
+
+        }
+
+    },
+
+    "url": "http://mano-vnfm:8090/ubi-etsi-mano/sol003",
+
+    "ignoreSsl": true,
+
+    "tlsCert": "",
+
+    "version": "2.6.1",
+
+    "subscriptionType": "VNF",
+
+    "serverType": "VNFM",
+
+    "capabilities": [
+
+        "100:ubi-v2.6.1"
+
+    ],
+
+    "localUser": \{
+
+    "clientId": "mano-nfvo",
+
+    "clientSecret": "ed9aeb6d-3ea5-4392-bb22-835603cf3dfc",
+
+    "tokenEndpoint": "http://auth.mano.ubiqube.com/auth/realms/mano-realm/protocol/openid-connect/token"
+
+  }
+
+}
+
+'
+
+=== b. Register vim for nfvo:
+
+Url :
+[.underline]#http://192.168.230.128:8100/ubi-etsi-mano/admin/vim/register#
+
+curl --location 'http://192.168.230.128:8100/ubi-etsi-mano/admin/vim/register' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: */*' \
+
+--header 'Authorization: Bearer xxxxxx' \
+
+--data '\{
+
+    "vimId": "e4bffd97-2cd1-43d3-9cf4-2c582cc8aec1",
+
+    "vimType": "OPENSTACK_V3",
+
+    "interfaceInfo": \{
+
+        "endpoint": "http://10.31.1.108:5000/v3"
+
+    },
+
+    "accessInfo": \{
+
+        "username": "admin",
+
+        "password": "9f865149f0b64c92",
+
+        "projectId": "1da4d2fa72dc41dfb71a9972809e50ae",
+
+        "projectDomain": "Default",
+
+        "userDomain": "Default"
+
+    },
+
+    "jujuInfo": \{
+
+        "imageId": "9f326f5f-7839-4928-9722-ad51ca97b478",
+
+        "region": "RegionOne",
+
+        "constraints": "arch=amd64",
+
+        "networkId": "82dbcdf4-82d3-4e95-9244-550673250dad",
+
+        "charmName":"kubernetes-core",
+
+        "appName": "psql",
+
+        "osSeries": "jammy"
+
+    },
+
+    "geoloc": \{
+
+        "lng": 4.75801,
+
+        "lat": 45.8001016
+
+    }
+
+}'
+
+== 9. Vnfm:
+
+=== a. Register server:
+
+Url :
+[.underline]#http://192.168.230.128:8090/ubi-etsi-mano/admin/server#
+
+curl --location 'http://192.168.230.128:8090/ubi-etsi-mano/admin/server' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: */*' \
+
+--header 'Authorization: Bearer xxxxxx' \
+
+--data '\{
+
+    "name": "nfvo-1",
+
+    "authentification": \{
+
+        "authType": [
+
+            "OAUTH2_CLIENT_CREDENTIALS"
+
+        ],
+
+        "authParamOauth2": \{
+
+            "clientId": "mano-vnfm",
+
+            "clientSecret": "50e312ab-9f12-481e-b6a8-c23e0de21628",
+
+            "tokenEndpoint": "http://auth.mano.ubiqube.com/auth/realms/mano-realm/protocol/openid-connect/token",
+
+            "o2Username": "admin",
+
+            "o2Password": "pass",
+
+            "o2IgnoreSsl": true,
+
+            "grantType": "client_credentials"
+
+        }
+
+    },
+
+    "url": "http://mano-nfvo:8100/ubi-etsi-mano/sol003",
+
+    "ignoreSsl": true,
+
+    "tlsCert": "",
+
+    "version": "2.6.1",
+
+    "subscriptionType": "VNF",
+
+    "serverType": "NFVO",
+
+    "localUser": \{
+
+        "clientId": "mano-vnfm",
+
+        "clientSecret": "50e312ab-9f12-481e-b6a8-c23e0de21628",
+
+        "tokenEndpoint": "http://auth.mano.ubiqube.com/auth/realms/mano-realm/protocol/openid-connect/token"
+
+    }
+
+}
+
+'
+
+=== b. Register vim for vnfm:
+
+Url:
+[.underline]#http://192.168.230.128:8090/ubi-etsi-mano/admin/vim/register#
+
+curl --location 'http://192.168.230.128:8090/ubi-etsi-mano/admin/vim/register' \
+
+--header 'Content-Type: application/json' \
+
+--header 'Accept: */*' \
+
+--header 'Authorization: Bearer xxxxxx' \
+
+--data '\{
+
+    "vimId": "e4bffd97-2cd1-43d3-9cf4-2c582cc8aec1",
+
+    "vimType": "OPENSTACK_V3",
+
+    "interfaceInfo": \{
+
+        "endpoint": "http://10.31.1.108:5000/v3"
+
+    },
+
+    "accessInfo": \{
+
+        "username": "admin",
+
+        "password": "9f865149f0b64c92",
+
+        "projectId": "1da4d2fa72dc41dfb71a9972809e50ae",
+
+        "projectDomain": "Default",
+
+        "userDomain": "Default"
+
+    },
+
+    "jujuInfo": \{
+
+        "imageId": "9f326f5f-7839-4928-9722-ad51ca97b478",
+
+        "region": "RegionOne",
+
+        "constraints": "arch=amd64",
+
+        "networkId": "82dbcdf4-82d3-4e95-9244-550673250dad",
+
+        "charmName":"kubernetes-core",
+
+        "appName": "psql",
+
+        "osSeries": "jammy"
+
+    },
+
+    "geoloc": \{
+
+        "lng": 4.75801,
+
+        "lat": 45.8001016
+
+    }
+
+}'
